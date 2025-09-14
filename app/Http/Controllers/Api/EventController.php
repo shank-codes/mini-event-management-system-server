@@ -18,6 +18,38 @@ class EventController extends Controller
     }
 
     // POST /api/v1/events
+    /**
+     * @OA\Post(
+     *     path="/v1/events",
+     *     operationId="createEvent",
+     *     tags={"Events"},
+     *     summary="Create a new event",
+     *     @OA\RequestBody(
+     *         required=true,
+     *         @OA\MediaType(
+     *             mediaType="application/json",
+     *             @OA\Schema(
+     *                 required={"name","start_time","end_time","max_capacity"},
+     *                 @OA\Property(property="name", type="string", maxLength=255),
+     *                 @OA\Property(property="location", type="string", maxLength=255, nullable=true),
+     *                 @OA\Property(property="start_time", type="string", format="date-time"),
+     *                 @OA\Property(property="end_time", type="string", format="date-time"),
+     *                 @OA\Property(property="max_capacity", type="integer", minimum=1)
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=201,
+     *         description="Event created",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="Event created successfully"),
+     *             @OA\Property(property="data", ref="#/components/schemas/Event")
+     *         )
+     *     ),
+     *     @OA\Response(response=422, description="Validation errors", @OA\JsonContent(ref="#/components/schemas/ValidationError")),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function store(StoreEventRequest $request): JsonResponse
     {
         $payload = $request->validated();
@@ -27,6 +59,28 @@ class EventController extends Controller
     }
 
     // GET /api/v1/events?timezone=Asia/Kolkata
+    /**
+     * @OA\Get(
+     *     path="/v1/events",
+     *     operationId="getEventsList",
+     *     tags={"Events"},
+     *     summary="Retrieve paginated list of events",
+     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer", example=1)),
+     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", example=15)),
+     *     @OA\Response(
+     *         response=200,
+     *         description="A list of events",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Event")),
+     *             @OA\Property(property="current_page", type="integer"),
+     *             @OA\Property(property="per_page", type="integer"),
+     *             @OA\Property(property="total", type="integer"),
+     *             @OA\Property(property="last_page", type="integer")
+     *         )
+     *     ),
+     *     @OA\Response(response=500, description="Server error")
+     * )
+     */
     public function index(Request $request): JsonResponse
     {
         $tz = $request->get('timezone', 'UTC');

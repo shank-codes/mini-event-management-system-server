@@ -186,26 +186,8 @@
                 "tags": [
                     "Events"
                 ],
-                "summary": "Retrieve paginated list of events",
+                "summary": "Retrieve list of events",
                 "operationId": "getEventsList",
-                "parameters": [
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer",
-                            "example": 1
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "schema": {
-                            "type": "integer",
-                            "example": 15
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "A list of events",
@@ -218,18 +200,6 @@
                                             "items": {
                                                 "$ref": "#/components/schemas/Event"
                                             }
-                                        },
-                                        "current_page": {
-                                            "type": "integer"
-                                        },
-                                        "per_page": {
-                                            "type": "integer"
-                                        },
-                                        "total": {
-                                            "type": "integer"
-                                        },
-                                        "last_page": {
-                                            "type": "integer"
                                         }
                                     },
                                     "type": "object"

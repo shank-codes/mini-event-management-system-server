@@ -64,18 +64,12 @@ class EventController extends Controller
      *     path="/v1/events",
      *     operationId="getEventsList",
      *     tags={"Events"},
-     *     summary="Retrieve paginated list of events",
-     *     @OA\Parameter(name="page", in="query", @OA\Schema(type="integer", example=1)),
-     *     @OA\Parameter(name="per_page", in="query", @OA\Schema(type="integer", example=15)),
+     *     summary="Retrieve list of events",
      *     @OA\Response(
      *         response=200,
      *         description="A list of events",
      *         @OA\JsonContent(
      *             @OA\Property(property="data", type="array", @OA\Items(ref="#/components/schemas/Event")),
-     *             @OA\Property(property="current_page", type="integer"),
-     *             @OA\Property(property="per_page", type="integer"),
-     *             @OA\Property(property="total", type="integer"),
-     *             @OA\Property(property="last_page", type="integer")
      *         )
      *     ),
      *     @OA\Response(response=500, description="Server error")
@@ -85,6 +79,7 @@ class EventController extends Controller
     {
         $tz = $request->get('timezone', 'UTC');
         $events = $this->service->listUpcomingEvents($tz);
-        return response()->json($events);
+        return response()->json(['data' => $events]);
+
     }
 }

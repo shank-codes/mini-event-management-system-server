@@ -55,17 +55,16 @@ class EventService
                 throw new ModelNotFoundException("Event not found");
             }
 
-            // Check duplicate registration by email
-            $existing = Attendee::where('event_id', $eventId)
-                                ->where('email', $attendeeData['email'])
-                                ->first();
-            if ($existing) {
+            // Combined query to check duplicate email existence and count attendees
+            $result = Attendee::where('event_id', $eventId)
+                ->selectRaw('COUNT(*) as total, SUM(CASE WHEN email = ? THEN 1 ELSE 0 END) as email_exists', [$attendeeData['email']])
+                ->first();
+
+            if ($result->email_exists) {
                 throw new \RuntimeException('This email is already registered for the event.');
             }
 
-            // Capacity check
-            $count = Attendee::where('event_id', $eventId)->count();
-            if ($count >= $event->max_capacity) {
+            if ($result->total >= $event->max_capacity) {
                 throw new \RuntimeException('Event is fully booked.');
             }
 
@@ -82,7 +81,14 @@ class EventService
 
     public function listAttendees(string $eventId, int $perPage = 10)
     {
-        $event = Event::findOrFail($eventId);
-        return Attendee::where('event_id', $eventId)->paginate($perPage);
+        $paginated =  Attendee::where('event_id', $eventId)->paginate($perPage);
+
+        return [
+            'current_page' => $paginated->currentPage(),
+            'per_page' => $paginated->perPage(),
+            'total' => $paginated->total(),
+            'last_page' => $paginated->lastPage(),
+            'data' => $paginated->items(),
+        ];
     }
 }

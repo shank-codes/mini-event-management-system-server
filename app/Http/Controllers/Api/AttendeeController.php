@@ -95,8 +95,8 @@ class AttendeeController extends Controller
     {
         $perPage = (int) $request->get('per_page', 10);
         try {
-            $page = $this->service->listAttendees($event, $perPage);
-            return response()->json($page);
+            $data = $this->service->listAttendees($event, $perPage);
+            return response()->json($data);
         } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
             return response()->json(['message' => 'Event not found.'], 404);
         }

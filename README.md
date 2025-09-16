@@ -54,8 +54,15 @@ Start the Laravel development server:
 ```
 php artisan serve
 ```
-
 By default, the server will be accessible at [http://localhost:8000](http://localhost:8000).
+
+### 6. API Documentation
+
+The Swagger API documentation is available at the following URL once the server is running:
+```
+http://localhost:8000/api/documentation
+```
+
 
 ---
 

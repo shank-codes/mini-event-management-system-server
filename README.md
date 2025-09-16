@@ -13,8 +13,15 @@ This backend server uses Laravel with a PostgreSQL database.
 ### 1. Setup PostgreSQL Database
 
 Create a PostgreSQL database named `eventdb`:
+```
+CREATE DATABASE eventdb;
+```
 
 Set the database timezone to UTC if not set by default:
+```
+ALTER DATABASE eventdb SET timezone TO 'UTC';
+```
+
 ### 2. Update Environment Variables
 
 Copy the `.env.example` file to `.env` and update the database connection settings:
@@ -30,20 +37,23 @@ DB_PASSWORD=your_db_password
 ### 3. Install PHP Dependencies
 
 Run the following to install PHP packages required by the project:
+```
 composer install
-
+```
 
 ### 4. Run Migrations
 
 Run database migrations to create the necessary tables:
+```
 php artisan migrate
-
+```
 
 ### 5. Start the Server
 
 Start the Laravel development server:
+```
 php artisan serve
-
+```
 
 By default, the server will be accessible at [http://localhost:8000](http://localhost:8000).
 
